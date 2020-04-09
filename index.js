@@ -32,3 +32,12 @@ assert.deepEqual(fuzzy.finder('term', 'any TERM'), {
   ],
   occurrence: 'term'
 });
+
+assert.deepEqual(fuzzy.finder('term', 'term any TERM'), {
+  score: 100 - (13 / 4),
+  matches: [
+    'term',
+    'TERM'
+  ],
+  occurrence: 'term'
+});
