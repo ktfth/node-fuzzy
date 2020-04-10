@@ -9,6 +9,14 @@ describe('Match', () => {
       rendered: 'pineapple', score: 57
     });
   });
+
+  it('should have tags arround, on context pressure', () => {
+    assert.deepEqual(fuzzy.match('apple', 'pineapple', {
+      pre: '<b>', pos: '</b>'
+    }), {
+      rendered: 'pine<b>a</b><b>p</b><b>p</b><b>l</b><b>e</b>', score: 57
+    });
+  });
 });
 
 describe('Test', () => {
