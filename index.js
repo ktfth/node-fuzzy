@@ -59,7 +59,8 @@ function finderHandler(term, chunk, options='gi') {
     matches: [],
     occurrence: term,
   };
-  out.presence = Math.max(chunk.length / term.length, 100) - Math.min(chunk.length / term.length, 100);
+  out.presence = Math.max(chunk.length / term.length, 100) -
+                 Math.min(chunk.length / term.length, 100);
   let rTerm = new RegExp(term, options);
   let matches = chunk.match(rTerm);
   if (matches) {
