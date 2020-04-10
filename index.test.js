@@ -3,6 +3,12 @@
 const fuzzy = require('./');
 const assert = require('assert');
 
+describe('Ratio', () => {
+  it('shoudl have a ratio aspect in relation of the content', () => {
+    assert.equal(fuzzy.ratio('apple', 'pineapple'), 57);
+  });
+});
+
 describe('Match', () => {
   it('should have a mounted properties', () => {
     assert.deepEqual(fuzzy.match('apple', 'pineapple'), {

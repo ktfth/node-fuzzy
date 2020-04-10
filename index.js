@@ -4,6 +4,29 @@ const assert = require('assert');
 
 const fuzzy = this;
 
+function ratioHandler(p, c, opts={}) {
+  let out = 0;
+  let curr = 0;
+  let pIdx = 0;
+  let cs = opts.caseSensitive && c || c.toLowerCase();
+
+  p = opts.caseSensitive && p || p.toLowerCase();
+
+  c.split('').forEach((v, i) => {
+    if (cs[i] === p[pIdx]) {
+      pIdx += 1;
+      curr += 1 + curr;
+    } else {
+      curr = 0;
+    }
+
+    out += curr;
+  });
+  out = (cs === p) ? Infinity : out;
+  return out;
+}
+fuzzy.ratio = ratioHandler;
+
 function matchHandler(p, c, opts={}) {
   let out = { rendered: '', score: 0 };
   let pIdx = 0;
@@ -20,19 +43,16 @@ function matchHandler(p, c, opts={}) {
     if (cs[i] === p[pIdx]) {
       v = pre + v + pos;
       pIdx += 1;
-      score.curr += 1 + score.curr;
     } else {
       score.curr = 0;
     }
 
-    score.total += score.curr;
     o[o.length] = v;
   });
 
   if (pIdx === p.length) {
-    score.total = (cs === p) ? Infinity : score.total;
     out.rendered = o.join('');
-    out.score = score.total;
+    out.score = fuzzy.ratio(p, c, opts);
     return out;
   }
 
