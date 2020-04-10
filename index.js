@@ -12,14 +12,14 @@ function matchHandler(pattern, chunk, options={}) {
   let currScore = 0;
   let pre = options.pre || '';
   let pos = options.pos || '';
-  let compareString = options.caseSensitive && chunk || chunk.toLowerCase();
+  let cs = options.caseSensitive && chunk || chunk.toLowerCase();
   let ch;
 
   pattern = options.caseSensitive && pattern || pattern.toLowerCase();
 
-  for (let i = 0; i < len; i += 1) {
+  chunk.split('').forEach((v, i) => {
     ch = chunk[i];
-    if (compareString[i] === pattern[patternIdx]) {
+    if (cs[i] === pattern[patternIdx]) {
       ch = pre + ch + pos;
       patternIdx += 1;
       currScore += 1 + currScore;
@@ -29,10 +29,10 @@ function matchHandler(pattern, chunk, options={}) {
 
     totalScore += currScore;
     out[out.length] = ch;
-  }
+  });
 
   if (patternIdx === pattern.length) {
-    totalScore = (compareString === pattern) ? Infinity : totalScore;
+    totalScore = (cs === pattern) ? Infinity : totalScore;
     return { rendered: out.join(''), score: totalScore };
   }
 
