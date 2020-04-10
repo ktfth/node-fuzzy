@@ -4,38 +4,37 @@ const assert = require('assert');
 
 const fuzzy = this;
 
-function matchHandler(pattern, chunk, options={}) {
+function matchHandler(p, c, opts={}) {
   let out = { rendered: '', score: 0 };
   let pIdx = 0;
   let o = [];
-  let len = chunk.length;
-  let totalScore = 0;
-  let currScore = 0;
-  let pre = options.pre || '';
-  let pos = options.pos || '';
-  let cs = options.caseSensitive && chunk || chunk.toLowerCase();
+  let len = c.length;
+  let score = { total: 0, curr: 0 };
+  let pre = opts.pre || '';
+  let pos = opts.pos || '';
+  let cs = opts.caseSensitive && c || c.toLowerCase();
   let ch;
 
-  pattern = options.caseSensitive && pattern || pattern.toLowerCase();
+  p = opts.caseSensitive && p || p.toLowerCase();
 
-  chunk.split('').forEach((v, i) => {
-    ch = chunk[i];
-    if (cs[i] === pattern[pIdx]) {
+  c.split('').forEach((v, i) => {
+    ch = c[i];
+    if (cs[i] === p[pIdx]) {
       ch = pre + ch + pos;
       pIdx += 1;
-      currScore += 1 + currScore;
+      score.curr += 1 + score.curr;
     } else {
-      currScore = 0;
+      score.curr = 0;
     }
 
-    totalScore += currScore;
+    score.total += score.curr;
     o[o.length] = ch;
   });
 
-  if (pIdx === pattern.length) {
-    totalScore = (cs === pattern) ? Infinity : totalScore;
+  if (pIdx === p.length) {
+    score.total = (cs === p) ? Infinity : score.total;
     out.rendered = o.join('');
-    out.score = totalScore;
+    out.score = score.total;
     return out;
   }
 
