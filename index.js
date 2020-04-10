@@ -47,12 +47,15 @@ fuzzy.test = testHandler;
 assert.ok(fuzzy.test('apple', 'pineapple'));
 
 function searchHandler(pattern, arr, options={}) {
-  return arr.map(v => fuzzy.match(pattern, v, options)).filter(v => v !== null);
+  return arr
+           .map(v => fuzzy.match(pattern, v, options))
+           .filter(v => v !== null)
+           .sort((a, b) => b.score - a.score);
 }
 fuzzy.search = searchHandler;
 assert.deepEqual(fuzzy.search('apple', ['pineapple', 'orange', 'apple']), [
+  fuzzy.match('apple', 'apple'),
   fuzzy.match('apple', 'pineapple'),
-  fuzzy.match('apple', 'apple')
 ]);
 
 function finderHandler(term, chunk, options='gi') {
