@@ -44,7 +44,6 @@ function testHandler(pattern, chunk, options={}) {
   return fuzzy.match(pattern, chunk, options) !== null;
 }
 fuzzy.test = testHandler;
-assert.ok(fuzzy.test('apple', 'pineapple'));
 
 function searchHandler(pattern, arr, options={}) {
   return arr
@@ -53,10 +52,6 @@ function searchHandler(pattern, arr, options={}) {
            .sort((a, b) => b.score - a.score);
 }
 fuzzy.search = searchHandler;
-assert.deepEqual(fuzzy.search('apple', ['pineapple', 'orange', 'apple']), [
-  fuzzy.match('apple', 'apple'),
-  fuzzy.match('apple', 'pineapple'),
-]);
 
 function finderHandler(term, chunk, options='gi') {
   let out = {
@@ -75,33 +70,3 @@ function finderHandler(term, chunk, options='gi') {
   return out;
 }
 fuzzy.finder = finderHandler;
-
-assert.deepEqual(fuzzy.finder('term', 'any term'), {
-  presence: 100 - (8 / 4),
-  matches: [
-    'term'
-  ],
-  occurrence: 'term'
-});
-
-assert.deepEqual(fuzzy.finder('term', 'any TERM'), {
-  presence: 100 - (8 / 4),
-  matches: [
-    'TERM',
-  ],
-  occurrence: 'term'
-});
-
-assert.deepEqual(fuzzy.finder('term', 'term any TERM'), {
-  presence: 100 - (13 / 4),
-  matches: [
-    'term',
-    'TERM'
-  ],
-  occurrence: 'term'
-});
-
-assert.ok(fuzzy.finder('ac', 'abca fghij').matches.length > 0);
-assert.deepEqual(fuzzy.finder('ac', 'abca fghij').matches, [
-  { rendered: 'abca fghij', score: 2 }
-]);
