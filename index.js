@@ -13,14 +13,12 @@ function matchHandler(p, c, opts={}) {
   let pre = opts.pre || '';
   let pos = opts.pos || '';
   let cs = opts.caseSensitive && c || c.toLowerCase();
-  let ch;
 
   p = opts.caseSensitive && p || p.toLowerCase();
 
   c.split('').forEach((v, i) => {
-    ch = c[i];
     if (cs[i] === p[pIdx]) {
-      ch = pre + ch + pos;
+      v = pre + v + pos;
       pIdx += 1;
       score.curr += 1 + score.curr;
     } else {
@@ -28,7 +26,7 @@ function matchHandler(p, c, opts={}) {
     }
 
     score.total += score.curr;
-    o[o.length] = ch;
+    o[o.length] = v;
   });
 
   if (pIdx === p.length) {
