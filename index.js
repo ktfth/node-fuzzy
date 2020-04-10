@@ -43,8 +43,6 @@ function matchHandler(p, c, opts={}) {
     if (cs[i] === p[pIdx]) {
       v = pre + v + pos;
       pIdx += 1;
-    } else {
-      score.curr = 0;
     }
 
     o[o.length] = v;
