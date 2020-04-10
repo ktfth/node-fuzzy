@@ -5,7 +5,7 @@ const assert = require('assert');
 const fuzzy = this;
 
 function matchHandler(pattern, chunk, options={}) {
-  let patternIdx = 0;
+  let pIdx = 0;
   let out = [];
   let len = chunk.length;
   let totalScore = 0;
@@ -19,9 +19,9 @@ function matchHandler(pattern, chunk, options={}) {
 
   chunk.split('').forEach((v, i) => {
     ch = chunk[i];
-    if (cs[i] === pattern[patternIdx]) {
+    if (cs[i] === pattern[pIdx]) {
       ch = pre + ch + pos;
-      patternIdx += 1;
+      pIdx += 1;
       currScore += 1 + currScore;
     } else {
       currScore = 0;
@@ -31,7 +31,7 @@ function matchHandler(pattern, chunk, options={}) {
     out[out.length] = ch;
   });
 
-  if (patternIdx === pattern.length) {
+  if (pIdx === pattern.length) {
     totalScore = (cs === pattern) ? Infinity : totalScore;
     return { rendered: out.join(''), score: totalScore };
   }
